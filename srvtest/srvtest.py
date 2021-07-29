@@ -1,6 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 
+USE_HTTPS = False
+
 class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
