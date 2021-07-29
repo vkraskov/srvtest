@@ -1,6 +1,5 @@
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-from SocketServer import ThreadingMixIn
-import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
 
 class Handler(BaseHTTPRequestHandler):
 
@@ -12,12 +11,17 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write('\n')
         return
 
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-    """Handle requests in a separate thread."""
+class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
+    pass
 
-if __name__ == '__main__':
-    server = ThreadedHTTPServer(('localhost', 4444), Handler)
-    print('Starting server, use <Ctrl-C> to stop')
+def run():
+    server = ThreadingSimpleServer(('0.0.0.0', 4444), Handler)
+    if USE_HTTPS:
+        import ssl
+        #server.socket = ssl.wrap_socket(server.socket, keyfile='./key.pem', certfile='./cert.pem', server_side=True)
+        server.socket = ssl.wrap_socket(server.socket, server_side=True)
     server.serve_forever()
 
-
+if __name__ == '__main__':
+	run()
+    
