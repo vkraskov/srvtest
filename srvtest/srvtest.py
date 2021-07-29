@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 import json
+import threading
 
 USE_HTTPS = False
 
@@ -15,15 +16,7 @@ class Handler(BaseHTTPRequestHandler):
 		return
 	
 	def do_GET(self):
-		self.reply_with({'value': 123})
-
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        message =  threading.currentThread().getName()
-        self.wfile.write(message)
-        self.wfile.write('\n')
-        return
+		self.reply_with({'thread': threading.currentThread().getName()})
 
 class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     pass
