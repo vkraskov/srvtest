@@ -1,9 +1,21 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
+import json
 
 USE_HTTPS = False
 
 class Handler(BaseHTTPRequestHandler):
+
+	def reply_with(self, value):
+		self.send_response(200)
+		self.end_headers()
+		json_string = json.dumps(value)
+		self.wfile.write(json_string.encode(encoding='utf_8'))
+		self.wfile.write(b"\n")
+		return
+	
+	def do_GET(self):
+		self.reply_with({'value': 123})
 
     def do_GET(self):
         self.send_response(200)
